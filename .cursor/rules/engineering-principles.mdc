@@ -1,0 +1,60 @@
+---
+description: Engineering standards for Django async chat-service — quality, API, distributed systems
+alwaysApply: true
+---
+
+# Engineering Principles
+
+Package layout and request flow: see `@chat-service-project-rule`.
+
+## Django & Python
+
+- **Layering:** views (thin) → services (business logic) → models (ORM)
+- Reuse or refactor before new code; **type hints**; structured logging; **pytest**
+- Async views for I/O-bound handlers; justify sync code paths
+- Change only what the task requires; fix root causes
+
+## API fundamentals
+
+- RESTful resource naming; consistent URL patterns under `/api/v1/`
+- Structured error envelope with machine-readable `code`
+- Correct HTTP status codes (400 validation, 401 unauth, 403 forbidden, 404 not found, 409 conflict, 429 rate limit, 500 server)
+- OpenAPI docs kept in sync with implementation
+- Version breaking changes; never silently change contract
+
+## Security
+
+- Authn/authz on every protected endpoint
+- Validate and sanitize all external input
+- Secrets via env vars only; never commit credentials
+- ORM queries only (no raw SQL without review)
+
+## Distributed systems awareness
+
+- **Scalability:** avoid N+1 queries; index hot columns; cache read-heavy paths
+- **Fault tolerance:** timeouts on external calls; retries with backoff where safe; graceful degradation
+- **Consistency:** use transactions for multi-step writes; idempotent handlers where retries possible; document eventual consistency
+
+## Debugging
+
+Reproduce → isolate layer → hypothesize → gather evidence (logs, query plans, request/response) → fix → add regression test → re-verify.
+
+## Verification
+
+- Test positive, negative, edge, and integration paths
+- Run `pytest` for every modified app
+- Re-check API contract and DB schema docs when shared contracts change
+
+## Environment
+
+```bash
+source ./.venv/bin/activate
+source ./.env
+```
+
+## Pre-PR
+
+- [ ] Correct app and layer boundaries
+- [ ] Tests and types updated
+- [ ] Migrations included for model changes
+- [ ] `api-inventory.md` and `db-schema.md` updated if applicable

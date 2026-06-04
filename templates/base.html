@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Chat Service{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    nav a { margin-right: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong><a href="{% url 'chat:lobby' %}">Chat Service</a></strong>
+    <nav>
+      {% if user.is_authenticated %}
+        <span>{{ user.username }}</span>
+        <a href="{% url 'accounts:logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}">Login</a>
+        <a href="{% url 'accounts:register' %}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

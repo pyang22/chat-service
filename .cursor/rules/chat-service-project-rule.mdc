@@ -1,0 +1,39 @@
+---
+alwaysApply: true
+---
+
+# Chat Service — Project Rules
+
+Engineering: `@engineering-principles`. New features: `@feature-pipeline`.
+
+## Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Django (async views, ASGI) |
+| Database | PostgreSQL via Django ORM |
+| API | REST + OpenAPI documentation |
+| Real-time | WebSockets or SSE (when needed) |
+| Tests | pytest + pytest-django |
+
+## Package layout
+
+| Path | Role |
+|------|------|
+| `config/` | Project settings, `urls.py`, `asgi.py` |
+| `apps/` | Django apps (`accounts`, `chat`, `core`, …) |
+| `apps/*/services/` | Business logic |
+| `apps/*/views/` or `api/` | HTTP handlers |
+| `tests/` | Cross-app integration tests |
+| `scripts/` | Deploy, automation |
+
+**Request flow:** HTTP/WS → ASGI → view → service → ORM → PostgreSQL
+
+## Conventions
+
+- Config via env vars and split settings modules; `.env` for local dev (never committed)
+- DB: Django migrations; schema `public` in DB `DB_NAME`
+- `snake_case` for Python; kebab-case for URL paths
+- Pin dependencies in `requirements.txt` or `pyproject.toml`
+
+Shared agent references: `.cursor/agents/shared/`.

@@ -1,1 +1,15 @@
 .venv/
+.cursor/agents/_active/
+.cursor/agents/_handoffs/
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.env
+*.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+staticfiles/

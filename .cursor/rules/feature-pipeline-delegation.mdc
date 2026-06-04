@@ -1,0 +1,17 @@
+---
+description: When feature-pipeline or phased feature work is requested, orchestrator must delegate to Task subagents
+alwaysApply: true
+---
+
+# Feature Pipeline — Subagent Delegation
+
+When the user invokes **`@feature-pipeline`**, mentions the **feature pipeline**, or asks to implement a **phase** of the chat app as a pipeline feature:
+
+1. **Orchestrator only** — the main agent must NOT write production code in `apps/`, `config/`, or migrations.
+2. **Use the Task tool** with `subagent_type`: `product-manager`, `architect`, `senior-developer`, `senior-qa`.
+3. **Follow gates** — stop after PM spec and architecture for user approval unless they explicitly say "skip gates".
+4. **Handoffs required** — each stage writes its file under `.cursor/agents/_handoffs/active/` before the next stage runs.
+
+Direct implementation is allowed only when the user explicitly invokes **`@senior-developer`** (or another single agent) without `@feature-pipeline`.
+
+Spec: [`.cursor/agents/feature-pipeline.md`](.cursor/agents/feature-pipeline.md)
